@@ -1,0 +1,104 @@
+import unittest
+from nltk.corpus import wordnet
+from augmentator import augmentator
+
+
+class TestAugmentation(unittest.TestCase):
+    def test_augment_pos1(self):
+        definitions = ['hello i desire to the menagerie', 'hullo i desire to the menagerie',
+                       'hi i desire to the menagerie'
+            , 'howdy i desire to the menagerie', 'how-do-you-do i desire to the menagerie'
+            , 'hello i require to the menagerie', 'hullo i require to the menagerie', 'hi i require to the menagerie'
+            , 'howdy i require to the menagerie', 'how-do-you-do i require to the menagerie'
+            , 'hello i want to the menagerie', 'hullo want to the menagerie', 'hi want to the menagerie'
+            , 'howdy i want to the menagerie', 'how-do-you-do i want to the menagerie'
+            , 'hello i need to the menagerie', 'hullo i need to the menagerie', 'hi i need to the menagerie'
+            , 'howdy i need to the menagerie', 'hello i desire to the zoo', 'hullo i desire to the zoo to the zoo'
+            , 'hi i desire to the zoo', 'howdy i desire to the zoo', 'how-do-you-do i desire to the zoo'
+            , 'hello i require to the zoo', 'hullo i require to the zoo', 'hi i require to the zoo'
+            , 'howdy i require to the zoo', 'how-do-you-do i require to the zoo'
+            , 'hello i want to the zoo', 'hullo want to the zoo', 'hi want to the zoo', 'howdy i want to the zoo'
+            , 'how-do-you-do i want to the zoo', 'hello i need to the zoo'
+            , 'hullo i need to the zoo', 'hi i need', 'howdy i need to the zoo', 'how-do-you-do i need to the zoo'
+            , 'hello i wanted to the zoo', 'hullo i wanted to the zoo', 'hi i wanted to the zoo',
+                       'howdy i wanted to the zoo'
+            , 'how-do-you-do i wanted to the zoo', 'hello i desire to the zoological garden'
+            , 'hullo i desire to the zoological garden', 'hi i desire to the zoological garden'
+            , 'howdy i desire to the zoological garden', 'how-do-you-do i desire to the zoological garden'
+            , 'hello i require to the zoological garden', 'hullo i require to the zoological garden'
+            , 'hi i require to the zoological garden', 'howdy i require to the zoological garden'
+            , 'hello i want', 'hullo want to the zoological garden', 'hi want to the zoological garden'
+            , 'howdy i want to the zoological garden', 'how-do-you-do i want to the zoological garden'
+            , 'hello i need to the zoological garden', 'hullo i need', 'hi i need to the zoological garden'
+            , 'howdy i need to the zoological garden', 'how-do-you-do i need to the zoological garden'
+            , 'hello i wanted to the zoological garden', 'hullo i wanted to the zoological garden'
+            , 'hi i wanted to the zoological garden', 'howdy i wanted to the zoological garden'
+            , 'how-do-you-do i wanted to the zoological garden', 'how-do-you-do i require to the zoological garden'
+            , 'hello i wanted to the menagerie']
+        text = augmentation.augment('hello i wanted to the zoo', state_random=True)
+        self.assertTrue(text in definitions)
+
+    def test_augment_pos2(self):
+        self.assertEqual(augmentation.augment("i to the"), "i to the")
+
+    def test_augment_pos3(self):
+        self.assertEqual(augmentation.augment('HELLO'), 'HELLO')
+
+    def test_augment_pos4(self):
+        self.assertEqual(augmentation.augment('hello'), 'hello')
+
+    def test_augment_pos5(self):
+        self.assertTrue(augmentation.augment('ZoO', amount=100) in ['zoo', 'menagerie', 'zoological garden'])
+
+    def test_augment_neg1(self):
+        with self.assertRaises(TypeError):
+            augmentation.augment(134)
+
+    def test_augment_neg2(self):
+        text = 'we cook in the university'
+        definitions = ['we Cook in the university', 'we Captain James Cook in the university',
+                       'we Captain Cook in the university',
+                       'we James Cook in the university']
+        self.assertTrue(augmentation.augment(text) not in definitions)
+
+    def test_augment_neg3(self):
+        self.assertEqual(augmentation.augment("hgfdswert"), "hgfdswert")
+
+    def test_augment_neg4(self):
+        with self.assertRaises(TypeError):
+            augmentation.augment("to", state_random=134)
+
+    def test_augment_neg5(self):
+        with self.assertRaises(TypeError):
+            augmentation.augment("to", amount="")
+
+    def test_augment_neg6(self):
+        with self.assertRaises(ValueError):
+            augmentation.augment("to", amount=101)
+
+    def test_get_wordnet_pos1(self):
+        self.assertEqual(augmentation.get_wordnet_pos("J"), wordnet.ADJ)
+
+    def test_get_wordnet_neg1(self):
+        self.assertEqual(augmentation.get_wordnet_pos("DD"), None)
+
+    def test_tokenize_pos1(self):
+        self.assertEqual(augmentation.tokenize_tag("cook"), [('cook', 'n')])
+
+    def test_tokenize_pos2(self):
+        self.assertEqual(augmentation.tokenize_tag("i to the"), [(), ()])
+
+    def test_tokenize_pos3(self):
+        self.assertEqual(augmentation.tokenize_tag("we went to the hospital"), [('went', 'v'), ('hospital', 'n')])
+
+    def test_tokenize_neg1(self):
+        with self.assertRaises(TypeError):
+            augmentation.tokenize_tag(134)
+
+    def test_tokenize_neg2(self):
+        with self.assertRaises(TypeError):
+            augmentation.augment("cook", state_random=134)
+
+
+if __name__ == '__main__':
+    unittest.main()
