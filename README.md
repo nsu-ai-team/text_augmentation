@@ -30,9 +30,9 @@ from augmentator import augmentator
 you will get new csv file with increased in 4 times amount of sentences and 30% of words changed in each sentence
 
 Running the test
-
+```
 python3 test.py
-
+```
 ## Contributing
 ...
 
