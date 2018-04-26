@@ -25,7 +25,7 @@ from augmentator import augmentator
 ```
 ### Examples of using Augmentator:
 ```
->>> YOUR_FOLDER python3 augmentator.py data.csv new_data.csv 3 30
+>>> YOUR_FOLDER python3 augmentator.py data.csv 3 new_data.csv  30
 ```
 you will get new csv file with increased in 4 times amount of sentences and 30% of words changed in each sentence
 
@@ -42,6 +42,7 @@ Anna Mosolova
 
 Ivan Bondarenko
 
+Vadim Fomin
 
 
 See also the list of [contributors](https://github.com/nsu-ai/text_augmentation/contributors) who participated in this project.
